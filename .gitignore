@@ -42,7 +42,7 @@ cmake-build-*/
 *.iws
 
 # IntelliJ
-sobel.iml
+*.iml
 .idea/
 target/
 out/
