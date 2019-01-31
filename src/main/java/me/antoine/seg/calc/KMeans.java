@@ -26,8 +26,6 @@ public class KMeans {
             lookup.put(centroids[i], i);
         }
 
-        Map<Vector, Set<Vector>> layout = new HashMap<>();
-
         for (int i = 0; i < k; i++) {
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
@@ -45,24 +43,22 @@ public class KMeans {
                         }
                     }
 
-                    layout.getOrDefault(minVector, new HashSet<>()).add(current);
+                    this.index.put(current, lookup.get(minVector));
                 }
             }
 
             for (int c = 0; c < centroids.length; c++) {
                 Vector mean = new Vector(0, 0, 0, 0, 0);
+                int count = 0;
 
-                for (Vector vector : layout.get(centroids[c])) {
-                    mean = mean.add(vector);
+                for (Vector vector : this.index.keySet()) {
+                    if (this.index.get(vector) == c) {
+                        mean = mean.add(vector);
+                        count++;
+                    }
                 }
 
-                centroids[c] = mean.divide(layout.get(centroids[c]).size());
-            }
-        }
-
-        for (int c = 0; c < centroids.length; c++) {
-            for (Vector vector : layout.get(centroids[c])) {
-                this.index.put(vector, lookup.get(centroids[c]));
+                centroids[c] = mean.divide(count);
             }
         }
     }
